@@ -20,9 +20,40 @@ namespace R6_Match_Logging
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly DebugWindow debugWindow;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            debugWindow = new DebugWindow(this);
+
+            this.IsVisibleChanged += MainWindow_IsVisibleChanged;
+            this.LocationChanged += MainWindow_LocationChanged;
+            this.SizeChanged += MainWindow_SizeChanged;
+        }
+
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            debugWindow.SetPosition();
+        }
+
+        private void MainWindow_LocationChanged(object sender, EventArgs e)
+        {
+            debugWindow.SetPosition();
+        }
+
+        private void MainWindow_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (!this.IsVisible)
+            {
+                Environment.Exit(-1);
+            }
+        }
+
+        private void DebugButton_Click(object sender, RoutedEventArgs e)
+        {
+            debugWindow.Toggle();
         }
     }
 }
